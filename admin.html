@@ -72,6 +72,115 @@
             </div>
         </div>
 
+        <!-- Search -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-search"></i> Search Keys</h5>
+            </div>
+            <div class="card-body">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search by name or key...">
+            </div>
+        </div>
+
+        <!-- Keys Table -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-key"></i> API Keys Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>API Key</th>
+                                <th>Created</th>
+                                <th>Requests</th>
+                                <th>Last Used</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="keysTable">
+                            <!-- KEYS_TABLE -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Copy key functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('copy-btn')) {
+                const key = e.target.getAttribute('data-key');
+                navigator.clipboard.writeText(key).then(() => {
+                    const originalText = e.target.innerHTML;
+                    e.target.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                    e.target.classList.remove('btn-outline-secondary');
+                    e.target.classList.add('btn-success');
+                    
+                    setTimeout(() => {
+                        e.target.innerHTML = originalText;
+                        e.target.classList.remove('btn-success');
+                        e.target.classList.add('btn-outline-secondary');
+                    }, 2000);
+                });
+            }
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#keysTable tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+</html>                <div class="card text-white bg-success">
+                    <div class="card-body">
+                        <h5>Active Keys</h5>
+                        <h2>{{active_keys}}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-info">
+                    <div class="card-body">
+                        <h5>Total Requests</h5>
+                        <h2>{{total_requests}}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Key -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-plus-circle"></i> Create New API Key</h5>
+            </div>
+            <div class="card-body">
+                <form method="post" action="/admin/keys/create">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" name="name" placeholder="Key Name" required>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-key"></i> Generate Key
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Keys Table -->
         <div class="card">
             <div class="card-header">
